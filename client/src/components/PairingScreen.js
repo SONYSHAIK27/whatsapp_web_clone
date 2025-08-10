@@ -14,14 +14,20 @@ const PairingScreen = ({ onPaired }) => {
 
   const initNewCode = async () => {
     try {
+      setStatus('loading');
+      console.log('Attempting to generate QR code...');
       const { data } = await axios.post('/api/pair/init');
+      console.log('QR code generated successfully:', data);
       setSid(data.sid);
       setQrData(data.qrData);
       setStatus('pending');
       setExpiresIn(60);
       setAutoNote('');
     } catch (e) {
-      // noop
+      console.error('Failed to generate QR code:', e);
+      console.error('Error details:', e.response?.data || e.message);
+      setStatus('error');
+      setAutoNote(`Failed to generate QR code: ${e.response?.data?.error || e.message}`);
     }
   };
 
@@ -92,8 +98,14 @@ const PairingScreen = ({ onPaired }) => {
               <li>Tap Menu ⋮ or Settings and select Linked devices</li>
               <li>Tap Link a device and scan this QR code</li>
             </ol>
-            <button className="pair-btn" onClick={manualConfirm} disabled={!sid || status === 'paired'}>
-              I scanned the QR (demo)
+            <button 
+              className="pair-btn" 
+              onClick={manualConfirm} 
+              disabled={!sid || status === 'paired' || status === 'loading'}
+            >
+              {status === 'loading' ? 'Generating QR...' : 
+               status === 'paired' ? 'Paired Successfully!' : 
+               'I scanned the QR (demo)'}
             </button>
             <div className="pair-status">Status: {status}</div>
           </div>
