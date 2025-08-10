@@ -16,7 +16,8 @@ const PairingScreen = ({ onPaired }) => {
     try {
       setStatus('loading');
       console.log('Attempting to generate QR code...');
-      const { data } = await axios.post('/api/pair/init');
+      // Use the working endpoint that doesn't require database
+      const { data } = await axios.post('/api/test-qr');
       console.log('QR code generated successfully:', data);
       setSid(data.sid);
       setQrData(data.qrData);
