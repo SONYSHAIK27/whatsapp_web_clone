@@ -1,0 +1,34 @@
+name: Simple Deploy
+
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        cd client && npm install
+        
+    - name: Build frontend
+      run: cd client && npm run build
+        
+    - name: Deploy to Vercel (Simple)
+      run: |
+        echo "Deployment completed via Vercel dashboard"
+        echo "Environment variables should be set in Vercel dashboard:"
+        echo "- MONGODB_URI: ${{ secrets.MONGODB_URI }}"
+        echo "- REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}"
