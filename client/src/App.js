@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import './App.css';
+
+// Configure axios base URL for production
+const baseURL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+axios.defaults.baseURL = baseURL;
 import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
 import Header from './components/Header';
 import PairingScreen from './components/PairingScreen';
 
-const socket = io('http://localhost:5000');
+const socket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000');
 
 function App() {
   const [conversations, setConversations] = useState([]);
