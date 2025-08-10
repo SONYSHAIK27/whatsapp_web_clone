@@ -225,6 +225,11 @@ PORT=5000
 NODE_ENV=production
 ```
 
+### For Vercel Deployment
+Add these environment variables in your Vercel dashboard:
+- `MONGODB_URI`: Your MongoDB Atlas connection string
+- `REACT_APP_SERVER_URL`: Your Vercel app URL (e.g., https://your-app.vercel.app)
+
 ## Project Structure
 
 ```
