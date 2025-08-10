@@ -28,12 +28,24 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/whatsapp';
+console.log('Attempting to connect to MongoDB...');
+console.log('MongoDB URI length:', MONGODB_URI.length);
+console.log('MongoDB URI preview:', MONGODB_URI.substring(0, 30) + '...');
+
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // 5 second timeout
+  socketTimeoutMS: 45000, // 45 second timeout
+  connectTimeoutMS: 10000, // 10 second timeout
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => console.log('Connected to MongoDB successfully'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  console.error('Error name:', err.name);
+  console.error('Error message:', err.message);
+  console.error('Error code:', err.code);
+});
 
 // Message Schema
 const messageSchema = new mongoose.Schema({
@@ -173,14 +185,28 @@ app.get('/api/auth/me', async (req, res) => {
 // QR-like pairing endpoints
 app.post('/api/pair/init', async (req, res) => {
   try {
+    console.log('Pairing init endpoint called');
+    console.log('MongoDB connection state:', mongoose.connection.readyState);
+    
     const sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
     const code = String(Math.floor(100000 + Math.random() * 900000));
-    await Session.create({ sid, code });
+    
+    console.log('Attempting to create session with sid:', sid);
+    const session = await Session.create({ sid, code });
+    console.log('Session created successfully:', session._id);
+    
     const qrData = `wa-demo://pair?sid=${sid}&code=${code}`;
     res.json({ sid, code, qrData });
   } catch (error) {
     console.error('Error creating session:', error);
-    res.status(500).json({ error: 'Failed to create session' });
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    res.status(500).json({ 
+      error: 'Failed to create session',
+      details: error.message,
+      code: error.code
+    });
   }
 });
 
