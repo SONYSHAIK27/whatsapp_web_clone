@@ -382,6 +382,7 @@ app.get('/api/env-test', (req, res) => {
     mongodb_uri_set: !!process.env.MONGODB_URI,
     mongodb_uri_length: process.env.MONGODB_URI ? process.env.MONGODB_URI.length : 0,
     mongodb_uri_preview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'NOT SET',
+    mongodb_uri_full: process.env.MONGODB_URI || 'NOT SET',
     node_env: process.env.NODE_ENV,
     port: process.env.PORT
   });
