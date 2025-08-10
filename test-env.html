@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Environment Variables Test</title>
+</head>
+<body>
+    <h1>Environment Variables Test</h1>
+    <button onclick="testEnv()">Test Environment Variables</button>
+    <div id="result"></div>
+
+    <script>
+        async function testEnv() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing environment variables...';
+            
+            try {
+                // Test environment variables endpoint
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/env-test');
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h3>Environment Variables:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    <p>Status: ${response.status}</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
