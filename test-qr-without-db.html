@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test QR Without Database</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Test QR Generation Without Database</h1>
+    
+    <p>This test will generate a QR code without requiring a database connection.</p>
+    
+    <button onclick="testQRGeneration()">Test QR Generation</button>
+    <div id="result"></div>
+
+    <script>
+        async function testQRGeneration() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing QR generation without database...</div>';
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/test-qr', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                
+                const data = await response.json();
+                const statusClass = response.ok ? 'success' : 'error';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${statusClass}">
+                        <h3>QR Generation Test:</h3>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Response Time:</strong> ${duration}ms</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <p><strong>Note:</strong> This endpoint doesn't require database connection</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

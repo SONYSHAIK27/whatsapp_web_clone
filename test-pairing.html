@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pairing Endpoint Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Pairing Endpoint Test</h1>
+    <button onclick="testPairingInit()">Test /api/pair/init</button>
+    <button onclick="testSession()">Test /api/session</button>
+    <button onclick="testMongoConnection()">Test MongoDB Connection</button>
+    <div id="result"></div>
+
+    <script>
+        async function testPairingInit() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing /api/pair/init...</div>';
+            
+            try {
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/pair/init', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                const statusClass = response.ok ? 'success' : 'error';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${statusClass}">
+                        <h3>/api/pair/init Response:</h3>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testSession() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing /api/session...</div>';
+            
+            try {
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/session');
+                const data = await response.json();
+                const statusClass = response.ok ? 'success' : 'error';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${statusClass}">
+                        <h3>/api/session Response:</h3>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMongoConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing MongoDB connection...</div>';
+            
+            try {
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/env-test');
+                const data = await response.json();
+                const statusClass = response.ok ? 'success' : 'error';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${statusClass}">
+                        <h3>MongoDB Connection Test:</h3>
+                        <p><strong>MongoDB URI Set:</strong> ${data.mongodb_uri_set ? '✅ Yes' : '❌ No'}</p>
+                        <p><strong>URI Length:</strong> ${data.mongodb_uri_length}</p>
+                        <p><strong>URI Preview:</strong> ${data.mongodb_uri_preview}</p>
+                        <p><strong>Node Environment:</strong> ${data.node_env}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

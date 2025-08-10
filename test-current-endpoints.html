@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Current Endpoints Test</title>
+</head>
+<body>
+    <h1>Current Endpoints Test</h1>
+    <div id="results"></div>
+
+    <script>
+        const baseUrl = 'https://whatsapp-web-clone-hq31.vercel.app';
+        const results = document.getElementById('results');
+
+        async function testEndpoint(name, url, method = 'GET', body = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(url, options);
+                const data = await response.text();
+                
+                results.innerHTML += `
+                    <div style="margin: 10px 0; padding: 10px; border: 1px solid ${response.ok ? 'green' : 'red'};">
+                        <strong>${name}:</strong> ${response.status} ${response.statusText}<br>
+                        <small>${url}</small><br>
+                        <pre>${data.substring(0, 200)}${data.length > 200 ? '...' : ''}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                results.innerHTML += `
+                    <div style="margin: 10px 0; padding: 10px; border: 1px solid red;">
+                        <strong>${name}:</strong> ERROR<br>
+                        <small>${url}</small><br>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function runTests() {
+            results.innerHTML = '<h2>Testing endpoints...</h2>';
+            
+            // Test the working endpoint
+            await testEndpoint('Test QR (Working)', `${baseUrl}/api/test-qr`, 'POST');
+            
+            // Test the failing endpoint
+            await testEndpoint('Pair Init (Failing)', `${baseUrl}/api/pair/init`, 'POST');
+            
+            // Test session endpoint
+            await testEndpoint('Session', `${baseUrl}/api/session`);
+            
+            results.innerHTML += '<h2>Tests completed!</h2>';
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

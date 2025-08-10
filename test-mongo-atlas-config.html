@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MongoDB Atlas Configuration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>MongoDB Atlas Configuration Test</h1>
+    
+    <div class="info">
+        <h3>Current Status:</h3>
+        <p>✅ Environment variables are set correctly</p>
+        <p>❌ MongoDB connection is failing (10+ second timeout)</p>
+        <p>❌ Database write operations are timing out</p>
+    </div>
+    
+    <div class="warning">
+        <h3>Troubleshooting Steps:</h3>
+        <ol>
+            <li><strong>Check MongoDB Atlas Network Access:</strong>
+                <ul>
+                    <li>Go to MongoDB Atlas → Network Access</li>
+                    <li>Verify <code>0.0.0.0/0</code> is in the IP Access List</li>
+                    <li>Status should be "Active"</li>
+                </ul>
+            </li>
+            <li><strong>Check Database User:</strong>
+                <ul>
+                    <li>Go to MongoDB Atlas → Database Access</li>
+                    <li>Verify user <code>sonyshaik027</code> exists</li>
+                    <li>Authentication Method should be "SCRAM"</li>
+                    <li>Role should be "atlasAdmin@admin"</li>
+                </ul>
+            </li>
+            <li><strong>Reset User Password:</strong>
+                <ul>
+                    <li>Click "EDIT" on the user</li>
+                    <li>Reset password to: <code>S0ny027@</code></li>
+                    <li>Save changes</li>
+                </ul>
+            </li>
+            <li><strong>Test Connection:</strong>
+                <ul>
+                    <li>Wait 1-2 minutes after password reset</li>
+                    <li>Test the pairing endpoint again</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+    <div class="error">
+        <h3>Most Likely Issue:</h3>
+        <p>The database user password might be incorrect. Even though the user exists and has the right permissions, the password in the connection string might not match the actual password in MongoDB Atlas.</p>
+    </div>
+    
+    <div class="info">
+        <h3>Next Steps:</h3>
+        <p>1. Reset the database user password in MongoDB Atlas</p>
+        <p>2. Wait 1-2 minutes for changes to take effect</p>
+        <p>3. Test the pairing endpoint again</p>
+    </div>
+</body>
+</html>

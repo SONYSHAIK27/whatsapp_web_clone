@@ -11,6 +11,7 @@ import PairingScreen from './components/PairingScreen';
 const baseURL = 'https://whatsapp-web-clone-hq31.vercel.app';
 console.log('Server URL:', process.env.REACT_APP_SERVER_URL);
 console.log('Base URL:', baseURL);
+console.log('App Version:', Date.now()); // Cache busting
 axios.defaults.baseURL = baseURL;
 
 const socketUrl = 'https://whatsapp-web-clone-hq31.vercel.app';

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MongoDB Connection String Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+    </style>
+</head>
+<body>
+    <h1>MongoDB Connection String Test</h1>
+    
+    <div class="warning">
+        <h3>Expected Connection String Format:</h3>
+        <code>mongodb+srv://sonyshaik027:S0ny027@cluster0.zitqgzq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0</code>
+    </div>
+    
+    <button onclick="testConnectionString()">Test Connection String</button>
+    <button onclick="testMongoConnection()">Test MongoDB Connection</button>
+    <div id="result"></div>
+
+    <script>
+        async function testConnectionString() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing connection string format...</div>';
+            
+            try {
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/env-test');
+                const data = await response.json();
+                
+                const expectedLength = 109; // Length of the correct connection string
+                const expectedPreview = 'mongodb+srv://sonysh';
+                
+                let issues = [];
+                if (data.mongodb_uri_length !== expectedLength) {
+                    issues.push(`URI length is ${data.mongodb_uri_length}, expected ${expectedLength}`);
+                }
+                if (!data.mongodb_uri_preview.startsWith(expectedPreview)) {
+                    issues.push(`URI doesn't start with expected format`);
+                }
+                
+                const statusClass = issues.length === 0 ? 'success' : 'error';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${statusClass}">
+                        <h3>Connection String Analysis:</h3>
+                        <p><strong>URI Length:</strong> ${data.mongodb_uri_length} ${data.mongodb_uri_length === expectedLength ? '✅' : '❌'}</p>
+                        <p><strong>URI Preview:</strong> ${data.mongodb_uri_preview} ${data.mongodb_uri_preview.startsWith(expectedPreview) ? '✅' : '❌'}</p>
+                        <p><strong>Issues Found:</strong> ${issues.length === 0 ? 'None' : issues.join(', ')}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMongoConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing MongoDB connection...</div>';
+            
+            try {
+                const response = await fetch('https://whatsapp-web-clone-hq31.vercel.app/api/env-test');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h3>MongoDB Connection Status:</h3>
+                        <p><strong>MongoDB URI Set:</strong> ${data.mongodb_uri_set ? '✅ Yes' : '❌ No'}</p>
+                        <p><strong>URI Length:</strong> ${data.mongodb_uri_length}</p>
+                        <p><strong>URI Preview:</strong> ${data.mongodb_uri_preview}</p>
+                        <p><strong>Node Environment:</strong> ${data.node_env}</p>
+                        <p><strong>Note:</strong> This only checks if the environment variable is set, not if the connection works.</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
