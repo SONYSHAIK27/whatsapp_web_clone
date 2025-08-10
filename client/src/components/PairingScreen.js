@@ -47,7 +47,7 @@ const PairingScreen = ({ onPaired }) => {
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(async () => {
       try {
-        const { data } = await axios.get('/api/pair/status', { params: { sid } });
+        const { data } = await axios.get('/api/test-pair-status', { params: { sid } });
         setStatus(data.status);
         if (data.status === 'paired') {
           if (pollRef.current) clearInterval(pollRef.current);
@@ -78,7 +78,17 @@ const PairingScreen = ({ onPaired }) => {
 
   const manualConfirm = async () => {
     if (!sid) return;
-    await axios.post('/api/pair/confirm', { sid });
+    try {
+      const { data } = await axios.post('/api/test-pair-confirm', { sid });
+      setStatus(data.status);
+      if (data.status === 'paired') {
+        if (pollRef.current) clearInterval(pollRef.current);
+        if (tickRef.current) clearInterval(tickRef.current);
+        onPaired?.();
+      }
+    } catch (error) {
+      console.error('Failed to confirm pairing:', error);
+    }
   };
 
   return (

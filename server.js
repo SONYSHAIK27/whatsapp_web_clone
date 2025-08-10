@@ -414,6 +414,42 @@ app.post('/api/test-qr', async (req, res) => {
   }
 });
 
+// Temporary test endpoint - Pair status without database
+app.get('/api/test-pair-status', async (req, res) => {
+  try {
+    console.log('Test pair status endpoint called');
+    const { sid } = req.query;
+    
+    // For demo purposes, always return 'pending' status
+    // In a real app, this would check the actual pairing status
+    res.json({ 
+      status: 'pending',
+      message: 'Status check without database connection'
+    });
+  } catch (error) {
+    console.error('Error checking pair status:', error);
+    res.status(500).json({ error: 'Failed to check pair status' });
+  }
+});
+
+// Temporary test endpoint - Pair confirm without database
+app.post('/api/test-pair-confirm', async (req, res) => {
+  try {
+    console.log('Test pair confirm endpoint called');
+    const { sid } = req.body;
+    
+    // For demo purposes, always return success
+    // In a real app, this would confirm the pairing
+    res.json({ 
+      status: 'paired',
+      message: 'Pairing confirmed without database connection'
+    });
+  } catch (error) {
+    console.error('Error confirming pair:', error);
+    res.status(500).json({ error: 'Failed to confirm pairing' });
+  }
+});
+
 // Serve React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
