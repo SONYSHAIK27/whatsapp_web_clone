@@ -9,9 +9,13 @@ import PairingScreen from './components/PairingScreen';
 
 // Configure axios base URL for production
 const baseURL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+console.log('Server URL:', process.env.REACT_APP_SERVER_URL);
+console.log('Base URL:', baseURL);
 axios.defaults.baseURL = baseURL;
 
-const socket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000');
+const socketUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+console.log('Socket URL:', socketUrl);
+const socket = io(socketUrl);
 
 function App() {
   const [conversations, setConversations] = useState([]);
