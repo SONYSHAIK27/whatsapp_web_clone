@@ -175,13 +175,13 @@ app.post('/api/pair/init', async (req, res) => {
   try {
     const sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
     const code = String(Math.floor(100000 + Math.random() * 900000));
-    await mongoose.model('Session') || null; // no-op to avoid unused warnings
-  } catch {}
-  const sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  const code = String(Math.floor(100000 + Math.random() * 900000));
-  await Session.create({ sid, code });
-  const qrData = `wa-demo://pair?sid=${sid}&code=${code}`;
-  res.json({ sid, code, qrData });
+    await Session.create({ sid, code });
+    const qrData = `wa-demo://pair?sid=${sid}&code=${code}`;
+    res.json({ sid, code, qrData });
+  } catch (error) {
+    console.error('Error creating session:', error);
+    res.status(500).json({ error: 'Failed to create session' });
+  }
 });
 
 app.get('/api/pair/status', async (req, res) => {
