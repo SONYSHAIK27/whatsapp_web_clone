@@ -48,11 +48,15 @@
         async function runTests() {
             results.innerHTML = '<h2>Testing endpoints...</h2>';
             
-            // Test the working endpoint
+            // Test the working endpoints
             await testEndpoint('Test QR (Working)', `${baseUrl}/api/test-qr`, 'POST');
+            await testEndpoint('Test Pair Status (Working)', `${baseUrl}/api/test-pair-status?sid=test123`, 'GET');
+            await testEndpoint('Test Pair Confirm (Working)', `${baseUrl}/api/test-pair-confirm`, 'POST', { sid: 'test123' });
             
-            // Test the failing endpoint
+            // Test the failing endpoints
             await testEndpoint('Pair Init (Failing)', `${baseUrl}/api/pair/init`, 'POST');
+            await testEndpoint('Pair Status (Failing)', `${baseUrl}/api/pair/status?sid=test123`, 'GET');
+            await testEndpoint('Pair Confirm (Failing)', `${baseUrl}/api/pair/confirm`, 'POST', { sid: 'test123' });
             
             // Test session endpoint
             await testEndpoint('Session', `${baseUrl}/api/session`);
