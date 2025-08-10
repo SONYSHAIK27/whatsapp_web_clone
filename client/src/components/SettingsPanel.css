@@ -1,0 +1,49 @@
+.sp-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 72px; /* keep icon rail static; overlay only chats list window */
+  display: flex;
+  justify-content: flex-start;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.sp-panel {
+  width: calc(520px - 72px); /* same window area as chats list */
+  height: 100vh;
+  background: var(--whatsapp-sidebar-bg);
+  border-right: 1px solid var(--whatsapp-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--whatsapp-header-bg);
+  border-bottom: 1px solid var(--whatsapp-border);
+}
+
+.sp-back { background: none; border: none; color: var(--whatsapp-text-primary); font-size: 20px; cursor: pointer; padding: 6px; border-radius: 50%; }
+.sp-title { color: var(--whatsapp-text-primary); font-weight: 600; }
+
+.sp-search { position: relative; padding: 12px 16px; border-bottom: 1px solid var(--whatsapp-border); }
+.sp-search-icon { position: absolute; top: 50%; left: 28px; transform: translateY(-50%); color: var(--whatsapp-text-secondary); }
+.sp-search-input { width: 100%; padding: 10px 14px 10px 36px; border-radius: 8px; border: 1px solid var(--whatsapp-border); background: var(--whatsapp-input-bg); color: var(--whatsapp-text-primary); outline: none; }
+
+.sp-profile { display: flex; align-items: center; gap: 16px; padding: 16px; border-bottom: 1px solid var(--whatsapp-border); }
+.sp-avatar { width: 64px; height: 64px; border-radius: 50%; background: #00a884; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 24px; }
+.sp-name { color: var(--whatsapp-text-primary); font-weight: 600; }
+.sp-sub { color: var(--whatsapp-text-secondary); font-size: 13px; }
+
+.sp-list { flex: 1; overflow-y: auto; }
+.sp-row { width: 100%; background: none; border: none; display: flex; align-items: center; gap: 16px; padding: 14px 16px; color: var(--whatsapp-text-primary); text-align: left; position: relative; cursor: pointer; }
+.sp-row:hover { background: var(--whatsapp-hover); }
+.sp-row::after { content: ''; position: absolute; left: 76px; right: 0; bottom: 0; height: 1px; background: rgba(255,255,255,0.14); }
+.sp-ico { width: 44px; height: 44px; border-radius: 50%; background: var(--whatsapp-input-bg); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
+
+@media (max-width: 768px) { .sp-overlay { left: 0; } .sp-panel { width: 100%; } }
