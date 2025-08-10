@@ -109,35 +109,39 @@ function App() {
 
   return (
     <div className="app">
-      <div className="app-container">
-        <Sidebar 
-          conversations={conversations}
-          selectedConversation={selectedConversation}
-          onConversationSelect={handleConversationSelect}
-        />
-        <div className="main-content">
-          {!paired ? (
-            <PairingScreen onPaired={async () => { setPaired(true); await fetchConversations(); }} />
-          ) : selectedConversation ? (
-            <>
-              <Header conversation={selectedConversation} />
-              <ChatArea 
-                messages={messages}
-                onSendMessage={sendMessage}
-                conversation={selectedConversation}
-              />
-            </>
-          ) : (
-            <div className="welcome-screen">
-              <div className="welcome-content">
-                <div className="welcome-icon">💬</div>
-                <h1>WhatsApp Web Clone</h1>
-                <p>Select a conversation to start messaging</p>
+      {!paired ? (
+        // Show only QR pairing screen - no sidebar, no chat list
+        <PairingScreen onPaired={async () => { setPaired(true); await fetchConversations(); }} />
+      ) : (
+        // Show full WhatsApp Web interface after pairing
+        <div className="app-container">
+          <Sidebar 
+            conversations={conversations}
+            selectedConversation={selectedConversation}
+            onConversationSelect={handleConversationSelect}
+          />
+          <div className="main-content">
+            {selectedConversation ? (
+              <>
+                <Header conversation={selectedConversation} />
+                <ChatArea 
+                  messages={messages}
+                  onSendMessage={sendMessage}
+                  conversation={selectedConversation}
+                />
+              </>
+            ) : (
+              <div className="welcome-screen">
+                <div className="welcome-content">
+                  <div className="welcome-icon">💬</div>
+                  <h1>WhatsApp Web Clone</h1>
+                  <p>Select a conversation to start messaging</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
