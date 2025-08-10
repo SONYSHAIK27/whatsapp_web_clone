@@ -5,7 +5,6 @@ import './PairingScreen.css';
 
 const PairingScreen = ({ onPaired }) => {
   const [sid, setSid] = useState(null);
-  const [code, setCode] = useState(null);
   const [qrData, setQrData] = useState('');
   const [status, setStatus] = useState('pending');
   const [expiresIn, setExpiresIn] = useState(60);
@@ -17,7 +16,6 @@ const PairingScreen = ({ onPaired }) => {
     try {
       const { data } = await axios.post('/api/pair/init');
       setSid(data.sid);
-      setCode(data.code);
       setQrData(data.qrData);
       setStatus('pending');
       setExpiresIn(60);
