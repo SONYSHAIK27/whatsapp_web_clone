@@ -384,8 +384,34 @@ app.get('/api/env-test', (req, res) => {
     mongodb_uri_preview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'NOT SET',
     mongodb_uri_full: process.env.MONGODB_URI || 'NOT SET',
     node_env: process.env.NODE_ENV,
-    port: process.env.PORT
+    port: process.env.PORT,
+    mongoose_connection_state: mongoose.connection.readyState,
+    mongoose_connection_host: mongoose.connection.host,
+    mongoose_connection_name: mongoose.connection.name
   });
+});
+
+// Temporary test endpoint - QR code without database
+app.post('/api/test-qr', async (req, res) => {
+  try {
+    console.log('Test QR endpoint called');
+    
+    const sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const qrData = `wa-demo://pair?sid=${sid}&code=${code}`;
+    
+    console.log('Generated QR data:', qrData);
+    
+    res.json({ 
+      sid, 
+      code, 
+      qrData,
+      message: 'QR generated without database connection'
+    });
+  } catch (error) {
+    console.error('Error generating test QR:', error);
+    res.status(500).json({ error: 'Failed to generate test QR' });
+  }
 });
 
 // Serve React app
